@@ -1,8 +1,9 @@
 <script setup>
+import FormComponent from '@/components/Forms.vue'
+import TitleComponent from '@/components/Title.vue'
 </script>
 
 <template>
-    <div>
-        Teste
-    </div>
+        <TitleComponent title="Calcs" :isSubtitle=false />
+        <FormComponent formClass="login"/>
 </template>
