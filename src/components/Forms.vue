@@ -5,6 +5,10 @@
         formClass: {
             type: String,
             default: ''
+        },
+        fields: {
+            type: Array,
+            default: []
         }
     })
 </script>
@@ -14,11 +18,11 @@
         <TitleComponent title="Login" :isSubtitle="true" />
         <form>
             <InputComponent
-                inputType="text"
-                inputRequired=true
-                inputIconClass="fa-solid fa-signature"
-                inputPlaceholder="Enter your name">
-            </InputComponent>
+                v-for="field in fields"
+                :inputType="field.typeOfField"
+                :inputIconClass="field.iconClass"
+                :inputPlaceholder="field.placeholder"
+                />
         </form>
     </div>
 </template>
