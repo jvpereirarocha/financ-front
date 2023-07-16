@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import '@/assets/css/base.css'
 
 import Root from './Root.vue'
 import router from './router'
