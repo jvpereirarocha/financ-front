@@ -9,13 +9,17 @@
         fields: {
             type: Array,
             default: []
+        },
+        title: {
+            type: String,
+            default: ''
         }
     })
 </script>
 
 <template>
     <div class="form" :class="props.formClass">
-        <TitleComponent title="Login" :isSubtitle="true" />
+        <TitleComponent :title="title" :isSubtitle="true" />
         <form>
             <InputComponent
                 v-for="field in fields"
