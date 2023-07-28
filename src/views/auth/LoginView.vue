@@ -15,19 +15,19 @@ const loginFields = [
     required: true,
     iconClass: 'fa-solid fa-lock',
     placeholder: 'Enter your password'
-  },
+  }
 ]
 
 </script>
 
 <template>
         <TitleComponent title="Calcs" :isSubtitle=false />
-        <FormComponent formClass="login" :fields="loginFields"/>
+        <FormComponent formClass="login" title="Login" :fields="loginFields"/>
         <ButtonComponent buttonValue="Login" />
         <div class="sign-area">
-            <p>Don't have an account? <a href="custom_login.html">Sign Up</a> now</p>
+            <p>Don't have an account? <router-link to="/signup">Sign Up</router-link> now</p>
         </div>
         <div class="sign-area">
-            <p>Forgot your password? Click <a href="custom_login.html">here</a></p>
+            <p>Forgot your password? Click <router-link to="/change-password">here</router-link></p>
         </div>
 </template>
