@@ -1,13 +1,16 @@
+import LoginView from '@/views/auth/LoginView.vue'
+import SignUpView from '@/views/auth/SignUpView.vue'
+
 const authRouter = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('@/views/auth/LoginView.vue')
+        component: LoginView
     },
     {
         path: '/signup',
         name: 'signup',
-        component: () => import('@/views/auth/SignupView.vue')
+        component: SignUpView
     }
 ]
 
