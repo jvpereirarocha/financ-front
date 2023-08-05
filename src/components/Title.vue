@@ -13,5 +13,5 @@
 
 <template>
     <h1 v-if="!isSubtitle" class="title">{{ title }}</h1>
-    <h1 v-else class="subtitle">{{ title }}</h1>
+    <h2 v-else class="subtitle">{{ title }}</h2>
 </template>

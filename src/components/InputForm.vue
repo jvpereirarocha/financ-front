@@ -1,6 +1,4 @@
 <script setup>
-    import { ref } from 'vue'
-    const input = ref('')
     const props = defineProps({
         inputType: {
             type: String,
@@ -17,13 +15,37 @@
         inputPlaceholder: {
             type: String,
             default: ''
+        },
+        modelValue: {
+            type: String,
+            default: ''
         }
     })
+    defineEmits(['update:modelValue'])
 </script>
 
 <template>
-    <div class="input-container">
-        <input :type="inputType" class="form-control" :required=inputRequired :placeholder="inputPlaceholder">
-        <i :class="inputIconClass"></i>
+    <div class="input-container" v-if="inputRequired">
+        <input
+            class="form-control"
+            required
+            :type="inputType"
+            :placeholder="inputPlaceholder"
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+            >
+        
+            <i :class="inputIconClass"></i>
+    </div>
+    <div class="input-container" v-else>
+            <input
+            class="form-control"
+            :type="inputType"
+            :placeholder="inputPlaceholder"
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+            >
+    
+            <i :class="inputIconClass"></i>
     </div>
 </template>
