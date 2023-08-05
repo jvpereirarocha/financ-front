@@ -37,3 +37,40 @@
     transition: all 0.2s ease;
     margin-left: 0.6rem;
 }
+
+.button {
+    margin-top: 35px;
+}
+
+.button input {
+    border: none;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    background-color: var(--bg-tertiary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sign-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.sign-area p {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.sign-area a {
+    text-decoration: none;
+    color: var(--bg-secondary);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
