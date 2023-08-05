@@ -1,5 +1,5 @@
 <script setup>
-	import { reactive, ref } from 'vue'
+	import { ref } from 'vue'
 	const emailValue = ref('')
 	const passwordValue = ref('')
 	import TitleComponent from '@/components/Title.vue'
