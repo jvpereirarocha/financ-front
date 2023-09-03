@@ -1,5 +1,4 @@
 <script setup>
-import FormComponent from '@/components/Forms.vue'
 import TitleComponent from '@/components/Title.vue'
 import ButtonComponent from '@/components/Button.vue'
 
