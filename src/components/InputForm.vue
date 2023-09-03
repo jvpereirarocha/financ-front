@@ -1,5 +1,12 @@
 <script setup>
+    import { toRef } from 'vue'
+    import { useField } from 'vee-validate';
+
     const props = defineProps({
+        inputName: {
+            type: String,
+            default: ''
+        },
         inputType: {
             type: String,
             default: 'text'
@@ -21,7 +28,9 @@
             default: ''
         }
     })
-    defineEmits(['update:modelValue'])
+
+    const name = toRef(props, 'inputName')
+    defineEmits(['update:modelValue', 'blur'])
 </script>
 
 <template>
@@ -32,7 +41,9 @@
             :type="inputType"
             :placeholder="inputPlaceholder"
             :value="modelValue"
+            :name="name"
             @input="$emit('update:modelValue', $event.target.value)"
+            @blur="$emit('blur')"
             >
         
             <i :class="inputIconClass"></i>
@@ -43,7 +54,9 @@
             :type="inputType"
             :placeholder="inputPlaceholder"
             :value="modelValue"
+            :name="name"
             @input="$emit('update:modelValue', $event.target.value)"
+            @blur="$emit('blur')"
             >
     
             <i :class="inputIconClass"></i>
