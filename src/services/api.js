@@ -1,8 +1,11 @@
 export async function postRequest(url='', data={}, headers={}) {
     return fetch(url, {
         method: 'POST',
+        mode: 'cors',
         headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
         ...headers
         },
         body: JSON.stringify(data)
