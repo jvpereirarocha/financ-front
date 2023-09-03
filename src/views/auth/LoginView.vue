@@ -6,17 +6,58 @@
 	import ButtonComponent from '@/components/Button.vue'
 	import InputForm from '@/components/InputForm.vue'
 	import SignArea from '@/components/SignArea.vue'
+	import { useAuthStore } from '@/stores/auth'
+	import { useAlertStore } from '@/stores/components/alert.js'
+	import * as Yup from 'yup'
+	import { Form } from 'vee-validate'
+	import router from '@/router/index.js'
+	
+	const schema = Yup.object().shape({
+		email: Yup.string().email().required('Email is required'),
+		password: Yup.string().min(6).required('Password is required and must be at least 6 characters long')
+	})
+
+	async function submitForm () {
+		const authStore = useAuthStore();
+		const alertStore = useAlertStore();
+		try {
+			schema.validateSync({
+				email: emailValue.value,
+				password: passwordValue.value
+			})
+			const request = await authStore.loginUser(emailValue.value, passwordValue.value);
+			if (request === undefined) {
+				throw new Error("Login failed");
+			} else if (request.status === 200) {
+				alertStore.success('Login successful');
+				router.push({ name: 'home' });
+			}
+		} catch (error) {
+			alertStore.error(error.message)
+		}
+	}
+
 </script>
 
 <template>
 		<TitleComponent title="Calcs" :isSubtitle=false />
 		<div class="form login">
 			<TitleComponent title="Login" :isSubtitle=true />
-			<form>
-				<InputForm :inputType="'text'" :inputRequired="true" :inputIconClass="'fa-solid fa-envelope'" :inputPlaceholder="'Enter your email'" v-model="emailValue" />
-				<InputForm :inputType="'password'" :inputRequired="true" :inputIconClass="'fa-solid fa-lock'" :inputPlaceholder="'Enter your password'" v-model="passwordValue" />
-				<ButtonComponent :value="'Login'" />
-			</form>
+			<Form :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+				<InputForm
+					:inputType="'text'"
+					:inputRequired="true"
+					:inputIconClass="'fa-solid fa-envelope'"
+					:inputPlaceholder="'Enter your email'"
+					v-model="emailValue"/>
+				<InputForm
+					:inputType="'password'"
+					:inputRequired="true"
+					:inputIconClass="'fa-solid fa-lock'"
+					:inputPlaceholder="'Enter your password'"
+					v-model="passwordValue"/>
+				<ButtonComponent :value="'Login'" :onClickFunction="submitForm" />
+			</Form>
 			<SignArea :text="'Don\'t have an account?'" :url="'/register'" :link="'Sign Up'" />
 			<SignArea :text="'Forgot your password? Click'" :url="'/forgot-password'" :link="'here'" />
 		</div>
