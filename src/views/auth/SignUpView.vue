@@ -1,47 +1,93 @@
 <script setup>
+import { ref } from 'vue'
+const firstNameValue = ref('')
+const lastNameValue = ref('')
+const emailValue = ref('')
+const passwordValue = ref('')
+const confirmPasswordValue = ref('')
 import TitleComponent from '@/components/Title.vue'
 import ButtonComponent from '@/components/Button.vue'
+import InputForm from '@/components/InputForm.vue'
+import SignArea from '@/components/SignArea.vue'
+import { useAuthStore } from '@/stores/auth'
+import { useAlertStore } from '@/stores/components/alert.js'
+import * as Yup from 'yup'
+import { Form } from 'vee-validate'
+import router from '@/router/index.js'
 
-const signUpFields = [
-    {
-        typeOfField: 'text',
-        required: true,
-        iconClass: 'fa-solid fa-signature',
-        placeholder: 'Enter your first name'
-    },
-    {
-        typeOfField: 'text',
-        required: true,
-        iconClass: 'fa-solid fa-signature',
-        placeholder: 'Enter your last name'
-    },
-    {
-        typeOfField: 'text',
-        required: true,
-        iconClass: 'fa-solid fa-envelope',
-        placeholder: 'Enter your e-mail'
-    },
-    {
-        typeOfField: 'password',
-        required: true,
-        iconClass: 'fa-solid fa-lock',
-        placeholder: 'Enter your password'
-    },
-    {
-        typeOfField: 'password',
-        required: true,
-        iconClass: 'fa-solid fa-lock',
-        placeholder: 'Confirm your password'
-    },
-]
+const schema = Yup.object().shape({
+    firstName: Yup.string().min().required('First name is required'),
+    lastName: Yup.string().min().required('Last name is required'),
+    email: Yup.string().email().required('Email is required'),
+    password: Yup.string().min(6).required('Password is required and must be at least 6 characters long'),
+    confirmPassword: Yup.string().min(6).required('Confirm Password is required and must be at least 6 characters long')
+})
+
+async function submitForm() {
+    const authStore = useAuthStore();
+    const alertStore = useAlertStore();
+    try {
+        schema.validateSync({
+            firstName: firstNameValue.value,
+            lastName: lastNameValue.value,
+            email: emailValue.value,
+            password: passwordValue.value,
+            confirmPassword: confirmPasswordValue.value
+        })
+        const request = await authStore.loginUser(emailValue.value, passwordValue.value);
+        if (request === undefined) {
+            throw new Error("Login failed");
+        } else if (request.status === 200) {
+            alertStore.success('Login successful');
+            router.push({ name: 'home' });
+        }
+    } catch (error) {
+        alertStore.error(error.message)
+    }
+}
 
 </script>
 
 <template>
     <TitleComponent title="Calcs" :isSubtitle=false />
-    <FormComponent formClass="register" title="Sign Up" :fields="signUpFields" />
-    <ButtonComponent buttonValue="Register" />
-    <div class="sign-area">
-        <p>Already have an account? <router-link to="/login">Login</router-link></p>
+    <div class="form login">
+        <TitleComponent title="Sign Up" :isSubtitle=true />
+        <Form :validation-schema="schema">
+            <InputForm
+                :inputName="'firstName'"
+                :inputType="'text'"
+                :inputRequired="true"
+                :inputIconClass="'fa-solid fa-signature'"
+                :inputPlaceholder="'Enter your First Name'"
+                v-model="firstNameValue" />
+            <InputForm
+                :inputName="'lastName'"
+                :inputType="'text'"
+                :inputRequired="true"
+                :inputIconClass="'fa-solid fa-signature'"
+                :inputPlaceholder="'Enter your Last Name'" v-model="lastNameValue" />
+            <InputForm
+                :inputType="'text'"
+                :inputRequired="true"
+                :inputIconClass="'fa-solid fa-envelope'"
+                :inputPlaceholder="'Enter your email'"
+                v-model="emailValue"/>
+            <InputForm
+                :inputName="'password'"
+                :inputType="'password'"
+                :inputRequired="true"
+                :inputIconClass="'fa-solid fa-lock'"
+                :inputPlaceholder="'Enter your password'"
+                v-model="passwordValue" />
+            <InputForm
+                :inputName="'confirmPassword'"
+                :inputType="'password'"
+                :inputRequired="true"
+                :inputIconClass="'fa-solid fa-lock'"
+                :inputPlaceholder="'Confirm your password'"
+                v-model="confirmPasswordValue" />
+            <ButtonComponent :value="'Sign Up'" :onClickFunction="submitForm" />
+        </Form>
+        <SignArea :text="'Already have an account?'" :url="'/register'" :link="'Login'" />
     </div>
 </template>
