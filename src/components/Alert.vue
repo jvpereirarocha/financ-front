@@ -11,7 +11,7 @@ const { alert } = storeToRefs(alertStore)
 
 <template>
     <div v-if="alert" class="container">
-        <div class="alert alert-dismissable" :class="alert.type">
+        <div class="alert" :class="alert.type">
             <buttton @click="alertStore.clear()" class="btn btn-link close">X</buttton>
             {{ alert.message }}
         </div>
