@@ -20,8 +20,8 @@ export const useAuthStore = defineStore('auth', {
                     alertStore.error('Invalid credentials');
                     return;
                 }
-                const data = await data.json();
-                this.user = data;
+                const data = await request.json();
+                this.user = data.success;
                 localStorage.setItem('user', JSON.stringify(this.user));
                 return this.user;
             } catch(error) {
