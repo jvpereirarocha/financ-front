@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 const firstNameValue = ref('')
 const lastNameValue = ref('')
+const dateOfBirthValue = ref('')
 const emailValue = ref('')
 const passwordValue = ref('')
 const confirmPasswordValue = ref('')
@@ -18,6 +19,7 @@ import router from '@/router/index.js'
 const schema = Yup.object().shape({
     firstName: Yup.string().min().required('First name is required'),
     lastName: Yup.string().min().required('Last name is required'),
+    dateOfBirth: Yup.string().required('Date of Birth is required'),
     email: Yup.string().email().required('Email is required'),
     password: Yup.string().min(6).required('Password is required and must be at least 6 characters long'),
     confirmPassword: Yup.string().min(6).required('Confirm Password is required and must be at least 6 characters long')
@@ -30,6 +32,7 @@ async function submitForm() {
         schema.validateSync({
             firstName: firstNameValue.value,
             lastName: lastNameValue.value,
+            dateOfBirth: dateOfBirthValue.value,
             email: emailValue.value,
             password: passwordValue.value,
             confirmPassword: confirmPasswordValue.value
@@ -66,6 +69,14 @@ async function submitForm() {
                 :inputRequired="true"
                 :inputIconClass="'fa-solid fa-signature'"
                 :inputPlaceholder="'Enter your Last Name'" v-model="lastNameValue" />
+            <InputForm
+                :inputName="'dateOfBirth'"
+                :inputType="'text'"
+                :inputRequired="true"
+                :inputIconClass="'fa-solid fa-cake-candles'"
+                :hasMask="true"
+                maskFormat="##/##/####"
+                :inputPlaceholder="'Enter your Date of Birth'" v-model="dateOfBirthValue" />
             <InputForm
                 :inputType="'text'"
                 :inputRequired="true"

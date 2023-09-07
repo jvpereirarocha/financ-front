@@ -28,7 +28,7 @@
 			const request = await authStore.loginUser(emailValue.value, passwordValue.value);
 			if (request === undefined) {
 				throw new Error("Login failed");
-			} else if (request.status === 200) {
+			} else {
 				alertStore.success('Login successful');
 				router.push({ name: 'home' });
 			}
@@ -58,7 +58,7 @@
 					v-model="passwordValue"/>
 				<ButtonComponent :value="'Login'" :onClickFunction="submitForm" />
 			</Form>
-			<SignArea :text="'Don\'t have an account?'" :url="'/register'" :link="'Sign Up'" />
+			<SignArea :text="'Don\'t have an account?'" :url="'/signup'" :link="'Sign Up'" />
 			<SignArea :text="'Forgot your password? Click'" :url="'/forgot-password'" :link="'here'" />
 		</div>
 </template>
