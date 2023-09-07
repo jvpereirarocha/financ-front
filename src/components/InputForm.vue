@@ -1,6 +1,7 @@
 <script setup>
     import { toRef } from 'vue'
     import { useField } from 'vee-validate';
+    import { vMaska } from 'maska';
 
     const props = defineProps({
         inputName: {
@@ -26,6 +27,14 @@
         modelValue: {
             type: String,
             default: ''
+        },
+        hasMask: {
+            type: Boolean,
+            default: false
+        },
+        maskFormat: {
+            type: String,
+            default: ''
         }
     })
 
@@ -34,7 +43,23 @@
 </script>
 
 <template>
-    <div class="input-container" v-if="inputRequired">
+    <div class="input-container" v-if="inputRequired && hasMask">
+        <input
+            class="form-control"
+            required
+            :type="inputType"
+            :placeholder="inputPlaceholder"
+            :value="modelValue"
+            :name="name"
+            v-maska
+            :data-maska="maskFormat"
+            @input="$emit('update:modelValue', $event.target.value)"
+            @blur="$emit('blur')"
+            >
+        
+            <i :class="inputIconClass"></i>
+    </div>
+    <div class="input-container" v-else-if="inputRequired && hasMask === false">
         <input
             class="form-control"
             required
@@ -45,7 +70,22 @@
             @input="$emit('update:modelValue', $event.target.value)"
             @blur="$emit('blur')"
             >
-        
+    
+            <i :class=" inputIconClass "></i>
+    </div>
+    <div class="input-container" v-else-if="inputRequired === false && hasMask">
+            <input
+            class="form-control"
+            :type="inputType"
+            :placeholder="inputPlaceholder"
+            :value="modelValue"
+            :name="name"
+            v-maska
+            :data-maska="maskFormat"
+            @input="$emit('update:modelValue', $event.target.value)"
+            @blur="$emit('blur')"
+            >
+
             <i :class="inputIconClass"></i>
     </div>
     <div class="input-container" v-else>
