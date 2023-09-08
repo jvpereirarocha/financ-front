@@ -1,11 +1,19 @@
 <script setup>
-import { ref } from 'vue'
-const firstNameValue = ref('')
-const lastNameValue = ref('')
-const dateOfBirthValue = ref('')
-const emailValue = ref('')
-const passwordValue = ref('')
-const confirmPasswordValue = ref('')
+import { ref, reactive } from 'vue'
+// const firstNameValue = ref('')
+// const lastNameValue = ref('')
+// const dateOfBirthValue = ref('')
+// const emailValue = ref('')
+// const passwordValue = ref('')
+// const confirmPasswordValue = ref('')
+const signupData = reactive({
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+})
 import TitleComponent from '@/components/Title.vue'
 import ButtonComponent from '@/components/Button.vue'
 import InputForm from '@/components/InputForm.vue'
@@ -17,8 +25,8 @@ import { Form } from 'vee-validate'
 import router from '@/router/index.js'
 
 const schema = Yup.object().shape({
-    firstName: Yup.string().min().required('First name is required'),
-    lastName: Yup.string().min().required('Last name is required'),
+    firstName: Yup.string().min(3).required('First name is required'),
+    lastName: Yup.string().min(2).required('Last name is required'),
     dateOfBirth: Yup.string().required('Date of Birth is required'),
     email: Yup.string().email().required('Email is required'),
     password: Yup.string().min(6).required('Password is required and must be at least 6 characters long'),
@@ -30,19 +38,14 @@ async function submitForm() {
     const alertStore = useAlertStore();
     try {
         schema.validateSync({
-            firstName: firstNameValue.value,
-            lastName: lastNameValue.value,
-            dateOfBirth: dateOfBirthValue.value,
-            email: emailValue.value,
-            password: passwordValue.value,
-            confirmPassword: confirmPasswordValue.value
+            ...signupData
         })
-        const request = await authStore.loginUser(emailValue.value, passwordValue.value);
+        const request = await authStore.registerNewUser(signupData);
         if (request === undefined) {
-            throw new Error("Login failed");
-        } else if (request.status === 200) {
-            alertStore.success('Login successful');
-            router.push({ name: 'home' });
+            throw new Error("Error to register new user");
+        } else if (request.status === 201) {
+            alertStore.success('User created successful');
+            router.push({ name: 'login' });
         }
     } catch (error) {
         alertStore.error(error.message)
@@ -62,13 +65,14 @@ async function submitForm() {
                 :inputRequired="true"
                 :inputIconClass="'fa-solid fa-signature'"
                 :inputPlaceholder="'Enter your First Name'"
-                v-model="firstNameValue" />
+                v-model="signupData.firstName" />
             <InputForm
                 :inputName="'lastName'"
                 :inputType="'text'"
                 :inputRequired="true"
                 :inputIconClass="'fa-solid fa-signature'"
-                :inputPlaceholder="'Enter your Last Name'" v-model="lastNameValue" />
+                :inputPlaceholder="'Enter your Last Name'"
+                v-model="signupData.lastName" />
             <InputForm
                 :inputName="'dateOfBirth'"
                 :inputType="'text'"
@@ -76,29 +80,30 @@ async function submitForm() {
                 :inputIconClass="'fa-solid fa-cake-candles'"
                 :hasMask="true"
                 maskFormat="##/##/####"
-                :inputPlaceholder="'Enter your Date of Birth'" v-model="dateOfBirthValue" />
+                :inputPlaceholder="'Enter your Date of Birth'"
+                v-model="signupData.dateOfBirth" />
             <InputForm
                 :inputType="'text'"
                 :inputRequired="true"
                 :inputIconClass="'fa-solid fa-envelope'"
                 :inputPlaceholder="'Enter your email'"
-                v-model="emailValue"/>
+                v-model="signupData.email"/>
             <InputForm
                 :inputName="'password'"
                 :inputType="'password'"
                 :inputRequired="true"
                 :inputIconClass="'fa-solid fa-lock'"
                 :inputPlaceholder="'Enter your password'"
-                v-model="passwordValue" />
+                v-model="signupData.password" />
             <InputForm
                 :inputName="'confirmPassword'"
                 :inputType="'password'"
                 :inputRequired="true"
                 :inputIconClass="'fa-solid fa-lock'"
                 :inputPlaceholder="'Confirm your password'"
-                v-model="confirmPasswordValue" />
+                v-model="signupData.confirmPassword" />
             <ButtonComponent :value="'Sign Up'" :onClickFunction="submitForm" />
         </Form>
-        <SignArea :text="'Already have an account?'" :url="'/register'" :link="'Login'" />
+        <SignArea :text="'Already have an account?'" :url="'/login'" :link="'Login'" />
     </div>
 </template>
