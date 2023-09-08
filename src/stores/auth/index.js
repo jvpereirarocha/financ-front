@@ -33,6 +33,22 @@ export const useAuthStore = defineStore('auth', {
             this.user = null;
             localStorage.removeItem('user');
             router.push({ name: 'login' });
+        },
+        async registerNewUser(data) {
+            const alertStore = useAlertStore();
+            try {
+                const request = await postRequest(
+                    `${API_AUTH_URL}/register`, {...data}
+                )
+                if (!request.ok) {
+                    alertStore.error('Couldnt possible to register the user');
+                    return;
+                }
+                const response = await request.json();
+                return response.success;
+            } catch(error) {
+                alertStore.error(error);
+            }
         }
     }
 })
