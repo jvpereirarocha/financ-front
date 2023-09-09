@@ -2,4 +2,6 @@
 @import url('./components/root.css');
 @import url('./components/alert.css');
 @import url('./components/form.css');
+@import url('./views/auth.css');
+@import url('./views/home.css');
 @import url('./colors/colors.css');
