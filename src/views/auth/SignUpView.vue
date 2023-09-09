@@ -55,55 +55,59 @@ async function submitForm() {
 </script>
 
 <template>
-    <TitleComponent title="Calcs" :isSubtitle=false />
-    <div class="form login">
-        <TitleComponent title="Sign Up" :isSubtitle=true />
-        <Form :validation-schema="schema">
-            <InputForm
-                :inputName="'firstName'"
-                :inputType="'text'"
-                :inputRequired="true"
-                :inputIconClass="'fa-solid fa-signature'"
-                :inputPlaceholder="'Enter your First Name'"
-                v-model="signupData.firstName" />
-            <InputForm
-                :inputName="'lastName'"
-                :inputType="'text'"
-                :inputRequired="true"
-                :inputIconClass="'fa-solid fa-signature'"
-                :inputPlaceholder="'Enter your Last Name'"
-                v-model="signupData.lastName" />
-            <InputForm
-                :inputName="'dateOfBirth'"
-                :inputType="'text'"
-                :inputRequired="true"
-                :inputIconClass="'fa-solid fa-cake-candles'"
-                :hasMask="true"
-                maskFormat="##/##/####"
-                :inputPlaceholder="'Enter your Date of Birth'"
-                v-model="signupData.dateOfBirth" />
-            <InputForm
-                :inputType="'text'"
-                :inputRequired="true"
-                :inputIconClass="'fa-solid fa-envelope'"
-                :inputPlaceholder="'Enter your email'"
-                v-model="signupData.email"/>
-            <InputForm
-                :inputName="'password'"
-                :inputType="'password'"
-                :inputRequired="true"
-                :inputIconClass="'fa-solid fa-lock'"
-                :inputPlaceholder="'Enter your password'"
-                v-model="signupData.password" />
-            <InputForm
-                :inputName="'confirmPassword'"
-                :inputType="'password'"
-                :inputRequired="true"
-                :inputIconClass="'fa-solid fa-lock'"
-                :inputPlaceholder="'Confirm your password'"
-                v-model="signupData.confirmPassword" />
-            <ButtonComponent :value="'Sign Up'" :onClickFunction="submitForm" />
-        </Form>
-        <SignArea :text="'Already have an account?'" :url="'/login'" :link="'Login'" />
+    <div class="auth-area">
+        <div class="auth-container">
+            <TitleComponent title="Calcs" :isSubtitle=false />
+            <div class="form login">
+                <TitleComponent title="Sign Up" :isSubtitle=true />
+                <Form :validation-schema="schema">
+                    <InputForm
+                        :inputName="'firstName'"
+                        :inputType="'text'"
+                        :inputRequired="true"
+                        :inputIconClass="'fa-solid fa-signature'"
+                        :inputPlaceholder="'Enter your First Name'"
+                        v-model="signupData.firstName" />
+                    <InputForm
+                        :inputName="'lastName'"
+                        :inputType="'text'"
+                        :inputRequired="true"
+                        :inputIconClass="'fa-solid fa-signature'"
+                        :inputPlaceholder="'Enter your Last Name'"
+                        v-model="signupData.lastName" />
+                    <InputForm
+                        :inputName="'dateOfBirth'"
+                        :inputType="'text'"
+                        :inputRequired="true"
+                        :inputIconClass="'fa-solid fa-cake-candles'"
+                        :hasMask="true"
+                        maskFormat="##/##/####"
+                        :inputPlaceholder="'Enter your Date of Birth'"
+                        v-model="signupData.dateOfBirth" />
+                    <InputForm
+                        :inputType="'text'"
+                        :inputRequired="true"
+                        :inputIconClass="'fa-solid fa-envelope'"
+                        :inputPlaceholder="'Enter your email'"
+                        v-model="signupData.email"/>
+                    <InputForm
+                        :inputName="'password'"
+                        :inputType="'password'"
+                        :inputRequired="true"
+                        :inputIconClass="'fa-solid fa-lock'"
+                        :inputPlaceholder="'Enter your password'"
+                        v-model="signupData.password" />
+                    <InputForm
+                        :inputName="'confirmPassword'"
+                        :inputType="'password'"
+                        :inputRequired="true"
+                        :inputIconClass="'fa-solid fa-lock'"
+                        :inputPlaceholder="'Confirm your password'"
+                        v-model="signupData.confirmPassword" />
+                    <ButtonComponent :value="'Sign Up'" :onClickFunction="submitForm" />
+                </Form>
+                <SignArea :text="'Already have an account?'" :url="'/login'" :link="'Login'" />
+            </div>
+        </div>
     </div>
 </template>

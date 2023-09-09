@@ -40,25 +40,29 @@
 </script>
 
 <template>
-		<TitleComponent title="Calcs" :isSubtitle=false />
-		<div class="form login">
-			<TitleComponent title="Login" :isSubtitle=true />
-			<Form :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-				<InputForm
-					:inputType="'text'"
-					:inputRequired="true"
-					:inputIconClass="'fa-solid fa-envelope'"
-					:inputPlaceholder="'Enter your email'"
-					v-model="emailValue"/>
-				<InputForm
-					:inputType="'password'"
-					:inputRequired="true"
-					:inputIconClass="'fa-solid fa-lock'"
-					:inputPlaceholder="'Enter your password'"
-					v-model="passwordValue"/>
-				<ButtonComponent :value="'Login'" :onClickFunction="submitForm" />
-			</Form>
-			<SignArea :text="'Don\'t have an account?'" :url="'/signup'" :link="'Sign Up'" />
-			<SignArea :text="'Forgot your password? Click'" :url="'/forgot-password'" :link="'here'" />
+	<div class="auth-area">
+		<div class="auth-container">
+			<TitleComponent title="Calcs" :isSubtitle=false />
+			<div class="form login">
+				<TitleComponent title="Login" :isSubtitle=true />
+				<Form :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+					<InputForm
+						:inputType="'text'"
+						:inputRequired="true"
+						:inputIconClass="'fa-solid fa-envelope'"
+						:inputPlaceholder="'Enter your email'"
+						v-model="emailValue"/>
+					<InputForm
+						:inputType="'password'"
+						:inputRequired="true"
+						:inputIconClass="'fa-solid fa-lock'"
+						:inputPlaceholder="'Enter your password'"
+						v-model="passwordValue"/>
+					<ButtonComponent :value="'Login'" :onClickFunction="submitForm" />
+				</Form>
+				<SignArea :text="'Don\'t have an account?'" :url="'/signup'" :link="'Sign Up'" />
+				<SignArea :text="'Forgot your password? Click'" :url="'/forgot-password'" :link="'here'" />
+			</div>
 		</div>
+	</div>
 </template>
