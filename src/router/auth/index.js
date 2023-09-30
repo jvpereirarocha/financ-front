@@ -10,7 +10,10 @@ const authRouter = [
     {
         path: '/signup',
         name: 'signup',
-        component: SignUpView
+        component: SignUpView,
+        meta: {
+            auth: true
+        }
     }
 ]
 
