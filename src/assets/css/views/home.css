@@ -199,10 +199,13 @@ li:hover>a,
     color: var(--bg-tertiary);
 }
 
-a {
+.link-sidebar {
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+a {
     color: var(--bg-light);
     font-size: 0.875rem;
     text-decoration: none;
