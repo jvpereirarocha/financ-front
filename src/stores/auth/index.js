@@ -26,7 +26,6 @@ export const useAuthStore = defineStore('auth', {
                 return this.user;
             } catch(error) {
                 alertStore.error(error);
-                console.log(error)
             }
         },
         logout() {
@@ -42,6 +41,23 @@ export const useAuthStore = defineStore('auth', {
                 )
                 if (!request.ok) {
                     alertStore.error('Couldnt possible to register the user');
+                    return;
+                }
+                const response = await request.json();
+                return response.success;
+            } catch(error) {
+                alertStore.error(error);
+            }
+        },
+        async getUserName() {
+            const alertStore = useAlertStore();
+            try {
+                const userEmail = this.user.email;
+                const request = await postRequest(
+                    `${API_AUTH_URL}/get_profile_name/${userEmail}`
+                )
+                if (!request.ok) {
+                    alertStore.error('Couldnt possible to get the user name');
                     return;
                 }
                 const response = await request.json();
