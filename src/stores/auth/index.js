@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { postRequest } from '@/services/api.js'
+import { postRequest, getRequest } from '@/services/api.js'
 import router from '@/router/index.js'
 import { useAlertStore } from '@/stores/components/alert.js'
 
@@ -9,42 +9,33 @@ const API_AUTH_URL = `${import.meta.env.VITE_BASE_API_URL}/profile`
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: JSON.parse(localStorage.getItem('user')) || null,
+        token: null,
         returnUrl: {},
     }),
     actions: {
         async loginUser(email, password) {
             const alertStore = useAlertStore();
             try {
-                const request = await postRequest(`${API_AUTH_URL}/login`, { email, password });
-                if (!request.ok) {
-                    alertStore.error('Invalid credentials');
-                    return;
-                }
-                const data = await request.json();
-                this.user = data.success;
+                const userLogin = await postRequest(`${API_AUTH_URL}/login`, { email, password });
+                this.user = userLogin.success;
+                this.token = 'Bearer ' + userLogin.success.token;
                 localStorage.setItem('user', JSON.stringify(this.user));
-                return this.user;
+                return userLogin;
             } catch(error) {
                 alertStore.error(error);
             }
         },
         logout() {
             this.user = null;
+            this.token = null;
             localStorage.removeItem('user');
             router.push({ name: 'login' });
         },
         async registerNewUser(data) {
             const alertStore = useAlertStore();
             try {
-                const request = await postRequest(
-                    `${API_AUTH_URL}/register`, {...data}
-                )
-                if (!request.ok) {
-                    alertStore.error('Couldnt possible to register the user');
-                    return;
-                }
-                const response = await request.json();
-                return response.success;
+                const user = await postRequest(`${API_AUTH_URL}/register`, { ...data }, {'Authorization': this.token});
+                return user;
             } catch(error) {
                 alertStore.error(error);
             }
@@ -53,15 +44,11 @@ export const useAuthStore = defineStore('auth', {
             const alertStore = useAlertStore();
             try {
                 const userEmail = this.user.email;
-                const request = await postRequest(
-                    `${API_AUTH_URL}/get_profile_name/${userEmail}`
+                const response = await getRequest(
+                    `${API_AUTH_URL}/get_profile_name?email=${userEmail}`,
+                    { 'Authorization': this.token }
                 )
-                if (!request.ok) {
-                    alertStore.error('Couldnt possible to get the user name');
-                    return;
-                }
-                const response = await request.json();
-                return response.success;
+                return response;
             } catch(error) {
                 alertStore.error(error);
             }
