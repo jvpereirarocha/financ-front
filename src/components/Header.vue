@@ -1,11 +1,19 @@
 <script setup>
+    import { onMounted, onUnmounted, ref } from 'vue';
     import { useAuthStore } from '@/stores/auth';
-
-    const authStore = useAuthStore();
-    const getUserName = () => {
-        const userName = authStore.getUserName();
-        return userName;
-    }
+    const username = ref('');
+    onMounted(() => {
+        console.log('created');
+        const authStore = useAuthStore();
+        const response = authStore.getUserName();
+        response.then((data) => {
+            username.value = data.success;
+        })
+        return username;
+    })
+    onUnmounted(() => {
+        username.value = '';
+    })
 
 </script>
 
@@ -13,7 +21,7 @@
     <header class="header--wrapper">
         <div class="header--title">
             <span>Bem-vindo(a)</span>
-            <h2>{{ getUserName() }}</h2>
+            <h2>{{ username }}</h2>
         </div>
         <div class="user--info">
             <div class="search-box">
