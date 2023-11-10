@@ -1,25 +1,30 @@
-export async function postRequest(url='', data={}, headers={}) {
-    return fetch(url, {
+async function postRequest(url='', data={}, headers={}) {
+    const response = await fetch(url, {
         method: 'POST',
-        mode: 'cors',
         headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
         ...headers
         },
         body: JSON.stringify(data)
     })
+    if (!response.ok) {
+        throw new Error(response.statusText)
+    }
+    return response.json()
 }
 
 async function getRequest(url='', headers={}) {
-    return fetch(url, {
+    const response = await fetch(url, {
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
         ...headers
         },
     })
+    if (!response.ok) {
+        throw new Error(response.statusText)
+    }
+    return response.json()
 }
 
 async function putRequest(url='', data={}, headers={}) {
@@ -43,9 +48,4 @@ async function deleteRequest(url='', headers={}) {
     })
 }
 
-export default {
-    postRequest,
-    getRequest,
-    putRequest,
-    deleteRequest
-}
+export { postRequest, getRequest, putRequest, deleteRequest }
