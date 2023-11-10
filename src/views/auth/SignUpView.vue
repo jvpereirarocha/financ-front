@@ -40,12 +40,13 @@ async function submitForm() {
         schema.validateSync({
             ...signupData
         })
-        const request = await authStore.registerNewUser(signupData);
-        if (request === undefined) {
-            throw new Error("Error to register new user");
-        } else if (request.status === 201) {
-            alertStore.success('User created successful');
-            router.push({ name: 'login' });
+        const response = await authStore.registerNewUser(signupData);
+        if (response.hasOwnProperty('success')) {
+            alertStore.success(response.success)
+            router.push({ name: 'login' })
+            return
+        } else {
+            alertStore.error(response.error)
         }
     } catch (error) {
         alertStore.error(error.message)

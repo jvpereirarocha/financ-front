@@ -25,11 +25,12 @@
 				email: emailValue.value,
 				password: passwordValue.value
 			})
-			const request = await authStore.loginUser(emailValue.value, passwordValue.value);
-			if (request === undefined) {
-				throw new Error("Login failed");
+			const response = await authStore.loginUser(emailValue.value, passwordValue.value);
+			if (response.hasOwnProperty('error')) {
+				alertStore.error(response.error);
+				throw new Error(response.error);
 			} else {
-				alertStore.success('Login successful');
+				alertStore.success('Usuário logado com sucesso!');
 				router.push({ name: 'home' });
 			}
 		} catch (error) {
