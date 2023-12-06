@@ -7,9 +7,7 @@ async function postRequest(url='', data={}, headers={}) {
         },
         body: JSON.stringify(data)
     })
-    if (!response.ok) {
-        throw new Error(response.statusText)
-    }
+    
     return response.json()
 }
 

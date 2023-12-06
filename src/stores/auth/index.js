@@ -14,16 +14,14 @@ export const useAuthStore = defineStore('auth', {
     }),
     actions: {
         async loginUser(email, password) {
-            const alertStore = useAlertStore();
-            try {
-                const userLogin = await postRequest(`${API_AUTH_URL}/login`, { email, password });
-                this.user = userLogin.success;
-                this.token = 'Bearer ' + userLogin.success.token;
-                localStorage.setItem('user', JSON.stringify(this.user));
+            const userLogin = await postRequest(`${API_AUTH_URL}/login`, { email, password });
+            if (userLogin.error) {
                 return userLogin;
-            } catch(error) {
-                alertStore.error(error);
             }
+            this.user = userLogin.success;
+            this.token = 'Bearer ' + userLogin.success.token;
+            localStorage.setItem('user', JSON.stringify(this.user));
+            return userLogin;
         },
         logout() {
             this.user = null;

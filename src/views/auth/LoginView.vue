@@ -28,13 +28,17 @@
 			const response = await authStore.loginUser(emailValue.value, passwordValue.value);
 			if (response.hasOwnProperty('error')) {
 				alertStore.error(response.error);
+				emailValue.value = '';
+				passwordValue.value = '';
 				throw new Error(response.error);
 			} else {
 				alertStore.success('Usuário logado com sucesso!');
 				router.push({ name: 'home' });
 			}
 		} catch (error) {
-			alertStore.error(error.message)
+			alertStore.error('Login indisponível no momento, tente novamente mais tarde.')
+			emailValue.value = '';
+			passwordValue.value = '';
 		}
 	}
 
