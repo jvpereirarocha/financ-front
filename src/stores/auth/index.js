@@ -9,19 +9,26 @@ const API_AUTH_URL = `${import.meta.env.VITE_BASE_API_URL}/profile`
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: JSON.parse(localStorage.getItem('user')) || null,
-        token: localStorage.getItem('user') ? `Bearer ${JSON.parse(localStorage.getItem('user')).token}` : null,
+        token: JSON.parse(localStorage.getItem('token')) || null,
         returnUrl: {},
     }),
     actions: {
         async loginUser(email, password) {
-            const userLogin = await postRequest(`${API_AUTH_URL}/login`, { email, password });
-            if (userLogin.error) {
+            try {
+                const userLogin = await postRequest(`${API_AUTH_URL}/login`, { email, password });
+                let token = null;
+                if (userLogin.error) {
+                    return userLogin;
+                }
+                this.user = userLogin.success;
+                token = 'Bearer ' + this.user.token;
+                this.token = token;
+                localStorage.setItem('user', JSON.stringify(this.user));
+                localStorage.setItem('token', JSON.stringify(this.token));
                 return userLogin;
+            } catch(error) {
+                console.log(error);
             }
-            this.user = userLogin.success;
-            this.token = 'Bearer ' + userLogin.success.token;
-            localStorage.setItem('user', JSON.stringify(this.user));
-            return userLogin;
         },
         logout() {
             this.user = null;
