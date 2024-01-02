@@ -1,3 +1,35 @@
+<script setup>
+import { onMounted, reactive } from 'vue';
+import { useBalanceStore } from '@/stores/calcs'
+
+const transactionsData = reactive([]);
+
+onMounted(() => {
+    const balanceStore = useBalanceStore()
+    const lastTransactions = balanceStore.getLastTransactions()
+    lastTransactions.then((response) => {
+        return response
+    }).then((data) => {
+        if (data) {
+            const allTransactions = data.success
+            allTransactions.forEach((item) => {
+                transactionsData.push({
+                    id: item.id,
+                    date: item.date,
+                    description: item.description,
+                    value: item.value,
+                    type: item.type,
+                    category: item.category
+                })
+            })
+        }
+    })
+    return transactionsData
+})
+
+</script>
+
+
 <template>
     <section class="table--wrapper">
         <h1 class="section--title">Tabela de Transações</h1>
@@ -15,49 +47,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1111</td>
-                        <td>01/01/2023</td>
-                        <td>Conta de Luz</td>
-                        <td>R$ 350,00</td>
-                        <td>Despesa</td>
-                        <td>Casa</td>
-                        <td><button>Editar</button></td>
-                    </tr>
-                    <tr>
-                        <td>2222</td>
-                        <td>25/01/2023</td>
-                        <td>Salário do mês de Fevereiro</td>
-                        <td>R$ 5000,00</td>
-                        <td>Receita</td>
-                        <td>Trabalho</td>
-                        <td><button>Editar</button></td>
-                    </tr>
-                    <tr>
-                        <td>3333</td>
-                        <td>12/03/2023</td>
-                        <td>Conta de Água</td>
-                        <td>R$ 55,00</td>
-                        <td>Despesa</td>
-                        <td>Casa</td>
-                        <td><button>Editar</button></td>
-                    </tr>
-                    <tr>
-                        <td>4444</td>
-                        <td>10/04/2023</td>
-                        <td>Venda de equipamento</td>
-                        <td>R$ 1000,00</td>
-                        <td>Receita</td>
-                        <td>Vendas</td>
-                        <td><button>Editar</button></td>
-                    </tr>
-                    <tr>
-                        <td>5555</td>
-                        <td>31/05/2023</td>
-                        <td>Compras de mercado</td>
-                        <td>R$ 260,00</td>
-                        <td>Despesa</td>
-                        <td>Alimentação</td>
+                    <tr v-for="transaction in transactionsData" :key="transaction.id">
+                        <td>{{ transaction.id }}</td>
+                        <td>{{ transaction.date }}</td>
+                        <td>{{ transaction.description }}</td>
+                        <td>{{ transaction.value }}</td>
+                        <td>{{ transaction.type }}</td>
+                        <td>{{ transaction.category }}</td>
                         <td><button>Editar</button></td>
                     </tr>
                 </tbody>
