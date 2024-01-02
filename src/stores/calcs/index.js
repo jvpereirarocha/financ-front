@@ -38,5 +38,22 @@ export const useBalanceStore = defineStore('balance', {
                 alertStore.error(error);
             }
         },
+        async getLastTransactions(numberOfTransactions=null) {
+            let url = `${API_BALANCE_URL}/get_last_transactions`;
+            if (numberOfTransactions !== null) {
+                url = `${url}?numberOfTransactions=${numberOfTransactions}`;
+            }
+            const userStore = useAuthStore();
+            const alertStore = useAlertStore();
+            try {
+                const response = await getRequest(
+                    url,
+                    { 'Authorization': userStore.token }
+                )
+                return response;
+            } catch (error) {
+                alertStore.error(error);
+            }
+        },
     }
 })
