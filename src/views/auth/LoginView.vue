@@ -36,7 +36,7 @@
 				router.push({ name: 'home' });
 			}
 		} catch (error) {
-			alertStore.error('Login indisponível no momento, tente novamente mais tarde.')
+			alertStore.error(error.message || 'Login indisponível no momento, tente novamente mais tarde.')
 			emailValue.value = '';
 			passwordValue.value = '';
 		}
