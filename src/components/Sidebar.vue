@@ -11,10 +11,10 @@
         <div class="logo">Calcs</div>
         <ul class="menu">
             <li class="active">
-                <a class="link-sidebar" href="#">
+                <router-link class="link-sidebar" to="/">
                     <i class="fa-solid fa-house"></i>
                     <span>Página Inicial</span>
-                </a>
+                </router-link>
             </li>
             <li>
                 <a class="link-sidebar" href="#">
@@ -23,22 +23,16 @@
                 </a>
             </li>
             <li>
-                <a class="link-sidebar" href="#">
+                <router-link class="link-sidebar" to="/transactions">
                     <i class="fa-solid fa-list"></i>
                     <span>Transações</span>
-                </a>
+                </router-link>
             </li>
             <li>
-                <a class="link-sidebar" href="#">
+                <router-link class="link-sidebar" to="/reports">
                     <i class="fa-solid fa-file-lines"></i>
                     <span>Relatórios</span>
-                </a>
-            </li>
-            <li>
-                <a class="link-sidebar" href="#">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Configurações</span>
-                </a>
+                </router-link>
             </li>
             <li class="logout">
                 <a class="link-sidebar" href="#" @click="doLogout">
