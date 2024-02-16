@@ -2,7 +2,10 @@
 import { onMounted, reactive } from 'vue';
 import { useBalanceStore } from '@/stores/calcs'
 
-const transactionsData = reactive([]);
+const transactionsData = reactive({
+    lastTransactions: [],
+    amount: 'R$ 0,00'
+});
 
 onMounted(() => {
     const balanceStore = useBalanceStore()
@@ -10,10 +13,10 @@ onMounted(() => {
     lastTransactions.then((response) => {
         return response
     }).then((data) => {
-        if (data) {
-            const allTransactions = data.success
+        if (data && data.success) {
+            const allTransactions = data.success.lastTransactions
             allTransactions.forEach((item) => {
-                transactionsData.push({
+                transactionsData.lastTransactions.push({
                     id: item.id,
                     date: item.date,
                     description: item.description,
@@ -22,9 +25,10 @@ onMounted(() => {
                     category: item.category
                 })
             })
+            transactionsData.amount = data.success.amount
         }
     })
-    return transactionsData
+    return transactionsData;
 })
 
 </script>
@@ -46,25 +50,30 @@ onMounted(() => {
                         <th>Ação</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="transaction in transactionsData" :key="transaction.id">
-                        <td>{{ transaction.id }}</td>
-                        <td>{{ transaction.date }}</td>
-                        <td>{{ transaction.description }}</td>
-                        <td>{{ transaction.value }}</td>
-                        <td>{{ transaction.type }}</td>
-                        <td>{{ transaction.category }}</td>
-                        <td><button>Editar</button></td>
-                    </tr>
-                </tbody>
-                <tfoot class="table-footer">
-                    <tr>
-                        <td>Total: R$ 6000,00</td>
-                    </tr>
-                    <tr class="cell-button">
-                        <td colspan="7"><button class="btn-transaction">Ver todas</button></td>
-                    </tr>
-                </tfoot>
+                <span v-if="transactionsData.lastTransactions.length > 0">
+                    <tbody>
+                        <tr v-for="transaction in transactionsData.lastTransactions" :key="transaction.id">
+                            <td>{{ transaction.id }}</td>
+                            <td>{{ transaction.date }}</td>
+                            <td>{{ transaction.description }}</td>
+                            <td>{{ transaction.value }}</td>
+                            <td>{{ transaction.type }}</td>
+                            <td>{{ transaction.category }}</td>
+                            <td><button>Editar</button></td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="table-footer">
+                        <tr>
+                            <td>Total: {{ transactionsData.amount }}</td>
+                        </tr>
+                        <tr class="cell-button">
+                            <td colspan="7"><button class="btn-transaction">Ver todas</button></td>
+                        </tr>
+                    </tfoot>
+                </span>
+                <span v-else>
+                    <p> Nenhum registro encontrado </p>
+                </span>
             </table>
         </div>
     </section>
