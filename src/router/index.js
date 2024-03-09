@@ -11,15 +11,24 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to) => {
-  const publicPages = ['/login', '/signup', '/change-password']
-  const authRequired = !publicPages.includes(to.path);
-  const auth = useAuthStore();
+router.beforeEach(async (to, from, next) => {
 
-  if (authRequired && !auth.user) {
-    auth.returnUrl = to.path;
-    return '/login';
-  }
+    const authStore = useAuthStore();
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (authStore.token === null) {
+        next({
+          name: 'login',
+          params: {
+            nextUrl: to.fullPath
+          }
+        })
+      } else {
+          next();
+        }
+    } else {
+        next();
+    }
+
 })
 
 export default router;

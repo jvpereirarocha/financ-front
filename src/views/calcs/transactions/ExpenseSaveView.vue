@@ -10,7 +10,7 @@ const expenseData = reactive({
 import TitleComponent from '@/components/Title.vue'
 import ButtonComponent from '@/components/Button.vue'
 import InputForm from '@/components/InputForm.vue'
-import { useAuthStore } from '@/stores/auth'
+import { useTransactionStore } from '@/stores/transactions'
 import { useAlertStore } from '@/stores/components/alert.js'
 import * as Yup from 'yup'
 import { Form } from 'vee-validate'
@@ -25,16 +25,16 @@ const schema = Yup.object().shape({
 })
 
 async function submitForm() {
-    const authStore = useAuthStore();
+    const transactionStore = useTransactionStore();
     const alertStore = useAlertStore();
     try {
         schema.validateSync({
             ...expenseData
         })
-        const response = await authStore.registerNewUser(expenseData);
-        if (response.hasOwnProperty('success')) {
+        const response = await transactionStore.registerNewExpense(expenseData);
+        if (response.statusCode === 201) {
             alertStore.success(response.success)
-            router.push({ name: 'login' })
+            router.push({ name: 'transactions' })
             return
         } else {
             alertStore.error(response.error)
@@ -65,6 +65,9 @@ async function submitForm() {
                         :inputType="'text'"
                         :inputRequired="true"
                         :inputIconClass="'fa-solid fa-money-bills'"
+                        :hasMask="true"
+                        maskFormat="0,99"
+                        maskTokens="0:\d:multiple|9:\d:optional"
                         :inputPlaceholder="'Enter the expense value'"
                         v-model="expenseData.value" />
                     <InputForm

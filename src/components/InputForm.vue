@@ -32,7 +32,15 @@
             type: Boolean,
             default: false
         },
+        currencyValue: {
+            type: Boolean,
+            default: false
+        },
         maskFormat: {
+            type: String,
+            default: ''
+        },
+        maskTokens: {
             type: String,
             default: ''
         }
@@ -40,9 +48,35 @@
 
     const name = toRef(props, 'inputName')
     defineEmits(['update:modelValue', 'blur'])
+
+    const options = {
+        preProcess: (value) => {
+            if (!props.currencyValue) return value
+            if (props.currencyValue && !value) return ''
+            if (props.currencyValue) {
+                const sub = 3 - (val.includes(',') ? val.length - val.indexOf(',') : 0)
+                return Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                }).format(value).slice(0, sub ? -sub: undefined)
+            }
+            return value
+        },
+        postProcess: (value) => {
+            if (!props.currencyValue) return value
+            
+            if (props.currencyValue && !value) return ''
+            if (props.currencyValue) {
+                return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+            }
+            return value
+        }
+    }
+
 </script>
 
 <template>
+
     <div class="input-container" v-if="inputRequired && hasMask">
         <input
             class="form-control"
@@ -51,8 +85,9 @@
             :placeholder="inputPlaceholder"
             :value="modelValue"
             :name="name"
-            v-maska
+            v-maska:[options]
             :data-maska="maskFormat"
+            :data-maska-tokens="maskTokens"
             @input="$emit('update:modelValue', $event.target.value)"
             @blur="$emit('blur')"
             >
@@ -80,8 +115,9 @@
             :placeholder="inputPlaceholder"
             :value="modelValue"
             :name="name"
-            v-maska
+            v-maska:[options]
             :data-maska="maskFormat"
+            :data-maska-tokens="maskTokens"
             @input="$emit('update:modelValue', $event.target.value)"
             @blur="$emit('blur')"
             >
