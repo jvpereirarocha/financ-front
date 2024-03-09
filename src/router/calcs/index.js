@@ -7,7 +7,14 @@ const calcsRouter = [
     {
         path: '/transactions',
         name: 'transactions',
-        component: () => import('@/views/calcs/ListTransactionsView.vue')
+        component: () => import('@/views/calcs/transactions/ListTransactionsView.vue'),
+        children: [
+            {
+                path: 'save-expense',
+                name: 'save-expense',
+                component: () => import('@/views/calcs/transactions/ExpenseSaveView.vue')
+            }
+        ]
     },
     {
         path: '/reports',
