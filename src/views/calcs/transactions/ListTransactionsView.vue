@@ -1,6 +1,6 @@
 <script setup>
 
-import TableTransactionsView from './home/TableTransactionsView.vue';
+import TableTransactionsView from '@/views/calcs/home/TableTransactionsView.vue';
 import Button from '@/components/Button.vue'
 import Title from '@/components/Title.vue'
 import { useRouter } from 'vue-router';
@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 
 const goToExpenseForm = () => {
-    router.push('/')
+    router.push({ name: 'save-expense' })
 }
 
 const goToRevenueForm = () => {
@@ -31,4 +31,5 @@ const goToRevenueForm = () => {
     <section>
         <TableTransactionsView />
     </section>
+    <router-view></router-view>
 </template>
