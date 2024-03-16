@@ -2,6 +2,10 @@
 import { onMounted, reactive } from 'vue';
 import { useBalanceStore } from '@/stores/calcs'
 
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+
 const transactionsData = reactive({
     lastTransactions: [],
     amount: 'R$ 0,00'
@@ -31,35 +35,42 @@ onMounted(() => {
     return transactionsData;
 })
 
+const goToEdit = (id) => {
+    router.push({ name: 'save-expense', params: { id: id } })
+}
+
 </script>
 
 
 <template>
     <section class="table--wrapper">
         <h1 class="section--title">Tabela de Transações</h1>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID da Transação</th>
-                        <th>Data da transação</th>
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Tipo de transação</th>
-                        <th>Categoria</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <span v-if="transactionsData.lastTransactions.length > 0">
+        <span v-if="transactionsData.lastTransactions.length === 0">
+            <p> Nenhum registro encontrado </p>
+        </span>
+        <span v-else>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="3">ID da Transação</th>
+                            <th colspan="1">Data da transação</th>
+                            <th colspan="2">Descrição</th>
+                            <th colspan="1">Valor</th>
+                            <th colspan="1">Tipo de transação</th>
+                            <th colspan="1">Categoria</th>
+                            <th colspan="1">Ação</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr v-for="transaction in transactionsData.lastTransactions" :key="transaction.id">
-                            <td>{{ transaction.id }}</td>
-                            <td>{{ transaction.date }}</td>
-                            <td>{{ transaction.description }}</td>
-                            <td>{{ transaction.value }}</td>
-                            <td>{{ transaction.type }}</td>
-                            <td>{{ transaction.category }}</td>
-                            <td><button>Editar</button></td>
+                            <td colspan="3">{{ transaction.id }}</td>
+                            <td colspan="1">{{ transaction.date }}</td>
+                            <td colspan="2">{{ transaction.description }}</td>
+                            <td colspan="1">{{ transaction.value }}</td>
+                            <td colspan="1">{{ transaction.type }}</td>
+                            <td colspan="1">{{ transaction.category }}</td>
+                            <td colspan="1"><button @click="goToEdit(transaction.id)">Editar</button></td>
                         </tr>
                     </tbody>
                     <tfoot class="table-footer">
@@ -70,11 +81,8 @@ onMounted(() => {
                             <td colspan="7"><button class="btn-transaction">Ver todas</button></td>
                         </tr>
                     </tfoot>
-                </span>
-                <span v-else>
-                    <p> Nenhum registro encontrado </p>
-                </span>
-            </table>
-        </div>
+                </table>
+            </div>
+        </span>
     </section>
 </template>
