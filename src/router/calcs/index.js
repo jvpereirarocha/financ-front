@@ -16,7 +16,7 @@ const calcsRouter = [
         },
         children: [
             {
-                path: 'save-expense',
+                path: 'save-expense/:id',
                 name: 'save-expense',
                 component: () => import('@/views/calcs/transactions/ExpenseSaveView.vue'),
                 meta: {
