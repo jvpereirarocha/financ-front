@@ -378,7 +378,12 @@ a i {
 }
 
 .table-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    overflow: hidden;
     width: 100%;
+    margin: 1rem auto;
 }
 
 table {
@@ -390,9 +395,12 @@ table {
 thead {
     background-color: var(--bg-secondary);
     color: var(--bg-light);
+    display: flex;
+    font-weight: bold;
 }
 
 th {
+    flex: 1;
     padding: 1rem;
     text-align: left;
 }
@@ -402,9 +410,16 @@ tbody {
 }
 
 td {
+    flex: 1;
     padding: 1rem;
     font-size: 0.875rem;
     color: var(--bg-dark);
+}
+
+tr {
+    display: flex;
+    border-top: 1px solid var(--bg-light-gray);
+    width: 100%;
 }
 
 tr:nth-child(even) {
