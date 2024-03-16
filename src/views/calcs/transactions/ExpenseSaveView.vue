@@ -24,6 +24,12 @@ const schema = Yup.object().shape({
     category: Yup.string().required('Category is required'),
 })
 
+defineProps({
+    id: {
+        type: String
+    }
+})
+
 async function submitForm() {
     const transactionStore = useTransactionStore();
     const alertStore = useAlertStore();
