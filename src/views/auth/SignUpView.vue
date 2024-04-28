@@ -49,7 +49,7 @@ async function submitForm() {
             alertStore.error(response.error)
         }
     } catch (error) {
-        alertStore.error(error.message)
+        alertStore.error('Registro de usuário indisponível no momento, tente novamente mais tarde.')
     }
 }
 

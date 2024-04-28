@@ -28,7 +28,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="search" placeholder="Search" name="userInfo">
             </div>
-            <img src="profile.png" alt="Perfil">
+            <img src="../assets/images/profile.png" alt="Perfil">
         </div>
     </header>
 </template>

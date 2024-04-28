@@ -25,14 +25,6 @@ const calcsRouter = [
             }
         ]
     },
-    {
-        path: '/reports',
-        name: 'reports',
-        component: () => import('@/views/calcs/ReportsView.vue'),
-        meta: {
-            requiresAuth: true
-        },
-    },
 ]
 
 export default calcsRouter

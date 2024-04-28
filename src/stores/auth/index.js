@@ -37,12 +37,11 @@ export const useAuthStore = defineStore('auth', {
             router.push({ name: 'login' });
         },
         async registerNewUser(data) {
-            const alertStore = useAlertStore();
             try {
                 const user = await postRequest(`${API_AUTH_URL}/register`, { ...data }, {'Authorization': this.token});
                 return user;
             } catch(error) {
-                alertStore.error(error);
+                console.log(error);
             }
         },
         async getUserName() {
