@@ -3,7 +3,6 @@
     import { useAuthStore } from '@/stores/auth';
     const username = ref('');
     onMounted(() => {
-        console.log('created');
         const authStore = useAuthStore();
         const response = authStore.getUserName();
         response.then((data) => {

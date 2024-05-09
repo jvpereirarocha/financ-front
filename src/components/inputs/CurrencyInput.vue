@@ -22,7 +22,11 @@ const props = defineProps({
     }
 })
 
-const { inputRef } = useCurrencyInput({ currency: 'BRL' })
+const { inputRef } = useCurrencyInput({ 
+    currency: 'BRL',
+    autoDecimalDigits: true,
+    precision: 2,
+})
 
 const name = toRef(props, 'inputName')
 defineEmits(['update:modelValue', 'blur'])
