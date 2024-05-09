@@ -3,6 +3,9 @@
     import { useExpenseStore } from '@/stores/expenses/index.js'
     import { useAlertStore } from '@/stores/components/alert.js'
     import TitleComponent from '@/components/Title.vue'
+    import InputForm from '@/components/InputForm.vue'
+    import CurrencyInput from '@/components/inputs/CurrencyInput.vue'
+    import CheckboxInput from '@/components/inputs/CheckboxInput.vue'
     import ButtonComponent from '@/components/Button.vue'
     import * as Yup from 'yup'
     
@@ -59,21 +62,19 @@
                         :inputName="'description'"
                         :inputType="'text'"
                         :inputRequired="true"
-                        :inputIconClass="'fa-solid fa-signature'"
+                        :inputIconClass="'fa-solid fa-pencil'"
                         :inputPlaceholder="'Enter the description'"
                         v-model="expenseData.description" />
-                    <InputForm
-                        :inputName="'value'"
-                        :inputType="'text'"
-                        :inputRequired="true"
-                        :inputIconClass="'fa-solid fa-signature'"
+                    <CurrencyInput
+                        :inputName="value"
+                        :inputIconClass="'fa-solid fa-money-bill'"
                         :inputPlaceholder="'Enter the value'"
-                        v-model="expenseData.value" />
+                        v-model="expenseData.value"/>
                     <InputForm
                         :inputName="'dueDate'"
                         :inputType="'text'"
                         :inputRequired="true"
-                        :inputIconClass="'fa-solid fa-cake-candles'"
+                        :inputIconClass="'fa-solid fa-calendar'"
                         :hasMask="true"
                         maskFormat="##/##/####"
                         :inputPlaceholder="'Enter the due date'"
@@ -82,13 +83,12 @@
                         :inputName="'category'"
                         :inputType="'category'"
                         :inputRequired="true"
-                        :inputIconClass="'fa-solid fa-lock'"
+                        :inputIconClass="'fa-solid fa-list'"
                         :inputPlaceholder="'Enter the category'"
                         v-model="expenseData.category" />
-                    <InputForm
-                        :inputType="'text'"
-                        :inputRequired="false"
-                        :inputIconClass="'fa-solid fa-envelope'"
+                    <CheckboxInput
+                        :inputName="'alreadyPaid'"
+                        :inputIconClass="'fa-solid fa-check'"
                         :inputPlaceholder="'Already paid?'"
                         v-model="expenseData.alreadyPaid"/>
                     <ButtonComponent :value="'Save Expense'" :onClickFunction="submitForm" />

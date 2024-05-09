@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 
 const goToExpenseForm = () => {
-    router.push({ name: 'save-expense' })
+    router.push({ name: 'create-expense' })
 }
 
 const goToRevenueForm = () => {

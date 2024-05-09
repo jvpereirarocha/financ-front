@@ -54,7 +54,7 @@
             if (!props.currencyValue) return value
             if (props.currencyValue && !value) return ''
             if (props.currencyValue) {
-                const sub = 3 - (val.includes(',') ? val.length - val.indexOf(',') : 0)
+                const sub = 3 - (value.includes(',') ? value.length - value.indexOf(',') : 0)
                 return Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',

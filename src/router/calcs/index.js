@@ -14,16 +14,14 @@ const calcsRouter = [
         meta: {
             requiresAuth: true
         },
-        children: [
-            {
-                path: 'save-expense/:id',
-                name: 'save-expense',
-                component: () => import('@/views/calcs/transactions/ExpenseSaveView.vue'),
-                meta: {
-                    requiresAuth: true
-                }
-            }
-        ]
+    },
+    {
+        path: '/expenses/create',
+        name: 'create-expense',
+        component: () => import('@/views/calcs/expenses/CreateOrUpdateExpense.vue'),
+        meta: {
+            requiresAuth: true
+        },
     },
 ]
 
