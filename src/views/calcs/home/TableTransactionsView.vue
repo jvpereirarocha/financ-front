@@ -36,7 +36,7 @@ onMounted(() => {
 })
 
 const goToEdit = (id) => {
-    router.push({ name: 'save-expense', params: { id: id } })
+    router.push({ name: 'update-expense', params: { id: id } })
 }
 
 </script>
@@ -70,7 +70,9 @@ const goToEdit = (id) => {
                             <td colspan="1">{{ transaction.value }}</td>
                             <td colspan="1">{{ transaction.type }}</td>
                             <td colspan="1">{{ transaction.category }}</td>
-                            <td colspan="1"><button @click="goToEdit(transaction.id)">Editar</button></td>
+                            <td colspan="1">
+                                <button @click="goToEdit(transaction.id)">Editar</button>
+                            </td>
                         </tr>
                     </tbody>
                     <tfoot class="table-footer">

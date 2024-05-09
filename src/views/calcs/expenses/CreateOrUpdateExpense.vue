@@ -1,5 +1,5 @@
 <script setup>
-    import { reactive } from 'vue'
+    import { reactive, onMounted, onUnmounted } from 'vue'
     import { useExpenseStore } from '@/stores/expenses/index.js'
     import { useAlertStore } from '@/stores/components/alert.js'
     import TitleComponent from '@/components/Title.vue'
@@ -8,6 +8,36 @@
     import CheckboxInput from '@/components/inputs/CheckboxInput.vue'
     import ButtonComponent from '@/components/Button.vue'
     import * as Yup from 'yup'
+    
+    import router from '@/router/index.js'
+    import { useRoute } from 'vue-router'
+
+    const route = useRoute()
+    
+    const expenseStore = useExpenseStore();
+    const alertStore = useAlertStore();
+
+    const expenseId = route.params.id || undefined;
+
+    onMounted(() => {
+        if (expenseId === undefined) {
+            return;
+        }
+
+        const fetchExpense = expenseStore.getExpenseById(expenseId)
+        fetchExpense.then((data) => {
+            if (data && data.success) {
+                expenseData.description = data.success.description
+                expenseData.value = data.success.value
+                expenseData.dueDate = data.success.dueDate
+                expenseData.category = data.success.category
+                expenseData.alreadyPaid = data.success.alreadyPaid
+            }
+        }).catch(() => {
+            alertStore.error('Erro ao buscar despesa');
+        })
+        return expenseData;
+    })
     
     const expenseData = reactive({
         description: '',
@@ -18,19 +48,24 @@
     })
 
     const schema = Yup.object().shape({
-        description: Yup.string().email().required('Description is required'),
+        description: Yup.string().required('Description is required'),
         value: Yup.string().min(2).required('Value cannot be negative'),
         category: Yup.string().required('Category is required'),
     })
 
     async function submitForm() {
-        const expenseStore = useExpenseStore();
-        const alertStore = useAlertStore();
         try {
             schema.validateSync({
                 ...expenseData
             })
-            const response = await expenseStore.createNewExpense(expenseData);
+            let response = null;
+            
+            if (expenseId === undefined) {
+                response = await expenseStore.createNewExpense(expenseData);
+            } else {
+                response = await expenseStore.updateExpense(expenseId, expenseData)
+            }
+            
             if (response.hasOwnProperty('error')) {
                 alertStore.error(response.error);
                 throw new Error(response.error);

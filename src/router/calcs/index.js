@@ -23,6 +23,14 @@ const calcsRouter = [
             requiresAuth: true
         },
     },
+    {
+        path: '/expenses/update/:id',
+        name: 'update-expense',
+        component: () => import('@/views/calcs/expenses/CreateOrUpdateExpense.vue'),
+        meta: {
+            requiresAuth: true
+        },
+    },
 ]
 
 export default calcsRouter
