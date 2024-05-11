@@ -1,11 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
-// const firstNameValue = ref('')
-// const lastNameValue = ref('')
-// const dateOfBirthValue = ref('')
-// const emailValue = ref('')
-// const passwordValue = ref('')
-// const confirmPasswordValue = ref('')
+import { reactive } from 'vue'
 const signupData = reactive({
     firstName: '',
     lastName: '',
@@ -25,12 +19,27 @@ import { Form } from 'vee-validate'
 import router from '@/router/index.js'
 
 const schema = Yup.object().shape({
-    firstName: Yup.string().min(3).required('First name is required'),
-    lastName: Yup.string().min(2).required('Last name is required'),
-    dateOfBirth: Yup.string().required('Date of Birth is required'),
-    email: Yup.string().email().required('Email is required'),
-    password: Yup.string().min(6).required('Password is required and must be at least 6 characters long'),
-    confirmPassword: Yup.string().min(6).required('Confirm Password is required and must be at least 6 characters long')
+    firstName: Yup.string()
+        .min(1, 'Nome deve ter no mínimo 1 caracter')
+        .required('Nome é obrigatório'),
+    
+    lastName: Yup.string()
+        .min(1, 'Sobrenome deve ter no mínimo 1 caracter')
+        .required('Sobrenome é obrigatório'),
+    
+    dateOfBirth: Yup.string()
+        .required('Data de nascimento é obrigatória'),
+    
+    email: Yup.string().email().required('E-mail é obrigatório'),
+    
+    password: Yup.string()
+        .min(6, 'Senha deve ter no mínimo 6 caracteres')
+        .required('Senha é obrigatória'),
+    
+    confirmPassword: Yup.string()
+        .min(6, 'Confirmação de senha deve ter no mínimo 6 caracteres')
+        .required('Confirmação de senha é obrigatória')
+        .oneOf([Yup.ref('password'), null], 'As senhas não coincidem')
 })
 
 async function submitForm() {
@@ -49,7 +58,7 @@ async function submitForm() {
             alertStore.error(response.error)
         }
     } catch (error) {
-        alertStore.error('Registro de usuário indisponível no momento, tente novamente mais tarde.')
+        alertStore.error(error.message)
     }
 }
 
