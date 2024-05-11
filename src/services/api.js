@@ -26,7 +26,7 @@ async function getRequest(url='', headers={}) {
 }
 
 async function putRequest(url='', data={}, headers={}) {
-    return fetch(url, {
+    const response = await fetch(url, {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',
@@ -34,16 +34,25 @@ async function putRequest(url='', data={}, headers={}) {
         },
         body: JSON.stringify(data)
     })
+    if (!response.ok) {
+        throw new Error(response.statusText)
+    }
+    return response.json()
 }
 
 async function deleteRequest(url='', headers={}) {
-    return fetch(url, {
+    const response = await fetch(url, {
         method: 'DELETE',
         headers: {
         'Content-Type': 'application/json',
         ...headers
         },
     })
+    if (!response.ok) {
+        throw new Error(response.statusText)
+    }
+
+    return response.json()
 }
 
 export { postRequest, getRequest, putRequest, deleteRequest }
