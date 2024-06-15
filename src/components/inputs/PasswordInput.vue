@@ -1,24 +1,23 @@
 <script setup>
-
 import { toRef, ref, watch } from 'vue'
 
 const props = defineProps({
-    modelValue: {
-        type: String,
-        default: ''
-    },
-    inputName: {
-        type: String,
-        default: ''
-    },
-    inputIconClass: {
-        type: String,
-        value: ''
-    },
-    inputPlaceholder: {
-        type: String,
-        value: '',
-    }
+  modelValue: {
+    type: String,
+    default: ''
+  },
+  inputName: {
+    type: String,
+    default: ''
+  },
+  inputIconClass: {
+    type: String,
+    value: ''
+  },
+  inputPlaceholder: {
+    type: String,
+    value: ''
+  }
 })
 
 const typePassword = 'password'
@@ -36,7 +35,7 @@ const name = toRef(props, 'inputName')
 defineEmits(['update:modelValue', 'blur'])
 
 const changeInputPassword = () => {
-  hidePassword.value = !hidePassword.value;
+  hidePassword.value = !hidePassword.value
 }
 
 watch(hidePassword, (newValue, _) => {
@@ -48,20 +47,18 @@ watch(hidePassword, (newValue, _) => {
     currentInputClass.value = `${clickIconClass} ${openedEye}`
   }
 })
-
 </script>
 
-
 <template>
-    <div class="input-container">
-      <input
-          class="form-control"
-          required
-          :type="currentInputType"
-          :name="name"
-          :placeholder="inputPlaceholder"
-          >
-      <i :class="inputIconClass"></i>
-      <i :class="currentInputClass" @click="changeInputPassword"></i>
-    </div>
+  <div class="input-container">
+    <input
+      class="form-control"
+      required
+      :type="currentInputType"
+      :name="name"
+      :placeholder="inputPlaceholder"
+    />
+    <i :class="inputIconClass"></i>
+    <i :class="currentInputClass" @click="changeInputPassword"></i>
+  </div>
 </template>
