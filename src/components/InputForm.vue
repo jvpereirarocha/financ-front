@@ -24,35 +24,13 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  modelValue: {
-    type: String,
-    default: ''
-  },
-  hasMask: {
-    type: Boolean,
-    default: false
-  },
-  currencyValue: {
-    type: Boolean,
-    default: false
-  },
-  maskFormat: {
-    type: String,
-    default: ''
-  },
-  maskTokens: {
-    type: String,
-    default: ''
-  }
 })
-
-const name = toRef(props, 'inputName')
-defineEmits(['update:modelValue', 'blur'])
 
 const options = {
   preProcess: (value) => {
-    if (!props.currencyValue) return value
+    if (!props.currencyValue && !props.dateFormat) return value
     if (props.currencyValue && !value) return ''
+    if (props.dateFormat && !value) return ''
     if (props.currencyValue) {
       const sub = 3 - (value.includes(',') ? value.length - value.indexOf(',') : 0)
       return Intl.NumberFormat('pt-BR', {
@@ -61,80 +39,44 @@ const options = {
       })
         .format(value)
         .slice(0, sub ? -sub : undefined)
+    } else if (props.dateFormat) {
+      const {day, month, year} = value.split("/");
+      return new Date(`${year}-${month}-${day}`);
     }
     return value
   },
   postProcess: (value) => {
-    if (!props.currencyValue) return value
+    if (!props.currencyValue || !props.dateFormat) return value
 
     if (props.currencyValue && !value) return ''
+    if (props.dateFormat && ! value) return ''
     if (props.currencyValue) {
       return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    } else if (props.dateFormat) {
+      return value.toLocaleDateString('pt-BR');
     }
     return value
   }
 }
+const { value, errorMessage } = useField(() => props.inputName)
 </script>
 
 <template>
-  <div class="input-container" v-if="inputRequired && hasMask">
-    <input
-      class="form-control"
-      required
-      :type="inputType"
-      :placeholder="inputPlaceholder"
-      :value="modelValue"
-      :name="name"
-      v-maska:[options]
-      :data-maska="maskFormat"
-      :data-maska-tokens="maskTokens"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="$emit('blur')"
-    />
-
-    <i :class="inputIconClass"></i>
+  <div class="input-container">
+    <div class="form-group">
+      <input
+        :name="inputName"
+        :required="inputRequired"
+        :placeholder="inputPlaceholder"
+        :type="inputType"
+        class="form-control"
+        v-model="value"
+        v-maska="options"
+        >
+      <i :class="inputIconClass"></i>
+    </div>
   </div>
-  <div class="input-container" v-else-if="inputRequired && hasMask === false">
-    <input
-      class="form-control"
-      required
-      :type="inputType"
-      :placeholder="inputPlaceholder"
-      :value="modelValue"
-      :name="name"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="$emit('blur')"
-    />
-
-    <i :class="inputIconClass"></i>
-  </div>
-  <div class="input-container" v-else-if="inputRequired === false && hasMask">
-    <input
-      class="form-control"
-      :type="inputType"
-      :placeholder="inputPlaceholder"
-      :value="modelValue"
-      :name="name"
-      v-maska:[options]
-      :data-maska="maskFormat"
-      :data-maska-tokens="maskTokens"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="$emit('blur')"
-    />
-
-    <i :class="inputIconClass"></i>
-  </div>
-  <div class="input-container" v-else>
-    <input
-      class="form-control"
-      :type="inputType"
-      :placeholder="inputPlaceholder"
-      :value="modelValue"
-      :name="name"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="$emit('blur')"
-    />
-
-    <i :class="inputIconClass"></i>
-  </div>
+  <span>
+    {{ errorMessage }}
+  </span>
 </template>

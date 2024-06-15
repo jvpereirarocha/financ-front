@@ -14,10 +14,10 @@ import { Form } from 'vee-validate'
 import router from '@/router/index.js'
 
 const schema = Yup.object().shape({
-  email: Yup.string().email().required('Email is required'),
+  email: Yup.string().email('Formato de e-mail inválido').required('Email é obrigatório'),
   password: Yup.string()
-    .min(6)
-    .required('Password is required and must be at least 6 characters long')
+    .required('Senha é obrigatória')
+    .min(6, 'Senha deve ter no mínimo 6 caracteres')
 })
 
 async function submitForm() {
@@ -55,22 +55,23 @@ async function submitForm() {
         <TitleComponent title="Login" :isSubtitle="true" />
         <Form :validation-schema="schema" v-slot="{ errors, isSubmitting }">
           <InputForm
+            :inputName="'email'"
             :inputType="'text'"
             :inputRequired="true"
             :inputIconClass="'fa-solid fa-envelope'"
-            :inputPlaceholder="'Enter your email'"
+            :inputPlaceholder="'Insira seu e-mail'"
             v-model="emailValue"
           />
           <PasswordInput
             :inputName="'password'"
             :inputIconClass="'fa-solid fa-lock'"
-            :inputPlaceholder="'Enter your password'"
+            :inputPlaceholder="'Digite sua senha'"
             v-model="passwordValue"
           />
           <ButtonComponent :value="'Login'" :onClickFunction="submitForm" />
         </Form>
-        <SignArea :text="'Don\'t have an account?'" :url="'/signup'" :link="'Sign Up'" />
-        <SignArea :text="'Forgot your password? Click'" :url="'/forgot-password'" :link="'here'" />
+        <SignArea :text="'Não possui cadastro? Cadastre-se'" :url="'/signup'" :link="'aqui'" />
+        <SignArea :text="'Esqueceu sua senha? Clique'" :url="'/forgot-password'" :link="'aqui'" />
       </div>
     </div>
   </div>

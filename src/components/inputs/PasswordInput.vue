@@ -1,11 +1,8 @@
 <script setup>
+import { useField } from 'vee-validate';
 import { toRef, ref, watch } from 'vue'
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: ''
-  },
   inputName: {
     type: String,
     default: ''
@@ -31,9 +28,6 @@ let currentInputClass = ref(`${clickIconClass} ${closedEye}`)
 
 const hidePassword = ref(true)
 
-const name = toRef(props, 'inputName')
-defineEmits(['update:modelValue', 'blur'])
-
 const changeInputPassword = () => {
   hidePassword.value = !hidePassword.value
 }
@@ -47,6 +41,7 @@ watch(hidePassword, (newValue, _) => {
     currentInputClass.value = `${clickIconClass} ${openedEye}`
   }
 })
+const { value, errorMessage } = useField(() => props.inputName)
 </script>
 
 <template>
@@ -55,10 +50,12 @@ watch(hidePassword, (newValue, _) => {
       class="form-control"
       required
       :type="currentInputType"
-      :name="name"
+      :name="inputName"
       :placeholder="inputPlaceholder"
+      v-model="value"
     />
     <i :class="inputIconClass"></i>
     <i :class="currentInputClass" @click="changeInputPassword"></i>
   </div>
+  <span> {{ errorMessage }} </span>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 const signupData = reactive({
   firstName: '',
   lastName: '',
@@ -11,12 +11,13 @@ const signupData = reactive({
 import TitleComponent from '@/components/Title.vue'
 import ButtonComponent from '@/components/Button.vue'
 import PasswordInput from '@/components/inputs/PasswordInput.vue'
+import DateInput from '@/components/inputs/DateInput.vue'
 import InputForm from '@/components/InputForm.vue'
 import SignArea from '@/components/SignArea.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useAlertStore } from '@/stores/components/alert.js'
 import * as Yup from 'yup'
-import { Form } from 'vee-validate'
+import { useForm } from 'vee-validate'
 import router from '@/router/index.js'
 
 const schema = Yup.object().shape({
@@ -30,7 +31,7 @@ const schema = Yup.object().shape({
 
   dateOfBirth: Yup.string().required('Data de nascimento é obrigatória'),
 
-  email: Yup.string().email().required('E-mail é obrigatório'),
+  email: Yup.string().email('Formato de e-mail inválido').required('E-mail é obrigatório'),
 
   password: Yup.string()
     .min(6, 'Senha deve ter no mínimo 6 caracteres')
@@ -42,25 +43,41 @@ const schema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'As senhas não coincidem')
 })
 
-async function submitForm() {
-  const authStore = useAuthStore()
-  const alertStore = useAlertStore()
-  try {
-    schema.validateSync({
-      ...signupData
-    })
-    const response = await authStore.registerNewUser(signupData)
-    if (response.hasOwnProperty('success')) {
-      alertStore.success(response.success)
-      router.push({ name: 'login' })
-      return
-    } else {
-      alertStore.error(response.error)
-    }
-  } catch (error) {
-    alertStore.error(error.message)
-  }
-}
+const { handleSubmit } = useForm({
+    validationSchema: schema
+})
+
+const submitForm = handleSubmit(values => {
+    const authStore = useAuthStore()
+    const alertStore = useAlertStore()
+    const data = JSON.stringify(values, null, 2)
+    return authStore.registerNewUser(data)
+        .then((response) => {
+            console.log("This is the response: ", response)
+        })
+        .catch((error) => {
+            alertStore.error(error.message);
+        })
+})
+//   console.log("submiting... ", data)
+//   const authStore = useAuthStore()
+//   const alertStore = useAlertStore()
+//   try {
+//     schema.validateSync({
+//       ...signupData
+//     })
+//     const response = await authStore.registerNewUser(signupData)
+//     if (response.hasOwnProperty('success')) {
+//       alertStore.success(response.success)
+//       router.push({ name: 'login' })
+//       return
+//     } else {
+//       alertStore.error(response.error)
+//     }
+//   } catch (error) {
+//     alertStore.error(error.message)
+//   }
+// }
 </script>
 
 <template>
@@ -70,13 +87,13 @@ async function submitForm() {
       <hr class="divisor" />
       <div class="form login">
         <TitleComponent title="Sign Up" :isSubtitle="true" />
-        <Form :validation-schema="schema">
+        <form @submit="submitForm">
           <InputForm
             :inputName="'firstName'"
             :inputType="'text'"
             :inputRequired="true"
             :inputIconClass="'fa-solid fa-signature'"
-            :inputPlaceholder="'Enter your First Name'"
+            :inputPlaceholder="'Digite seu nome'"
             v-model="signupData.firstName"
           />
           <InputForm
@@ -84,41 +101,40 @@ async function submitForm() {
             :inputType="'text'"
             :inputRequired="true"
             :inputIconClass="'fa-solid fa-signature'"
-            :inputPlaceholder="'Enter your Last Name'"
+            :inputPlaceholder="'Digite seu sobrenome'"
             v-model="signupData.lastName"
           />
-          <InputForm
+          <DateInput
             :inputName="'dateOfBirth'"
-            :inputType="'text'"
-            :inputRequired="true"
             :inputIconClass="'fa-solid fa-cake-candles'"
-            :hasMask="true"
-            maskFormat="##/##/####"
-            :inputPlaceholder="'Enter your Date of Birth'"
+            :inputPlaceholder="'Data de nascimento'"
             v-model="signupData.dateOfBirth"
           />
           <InputForm
+            :inputName="'email'"
             :inputType="'text'"
             :inputRequired="true"
             :inputIconClass="'fa-solid fa-envelope'"
-            :inputPlaceholder="'Enter your email'"
+            :inputPlaceholder="'Insira seu e-mail'"
             v-model="signupData.email"
           />
           <PasswordInput
             :inputName="'password'"
             :inputIconClass="'fa-solid fa-lock'"
-            :inputPlaceholder="'Enter your password'"
+            :inputPlaceholder="'Digite uma senha'"
             v-model="signupData.password"
           />
           <PasswordInput
             :inputName="'confirmPassword'"
             :inputIconClass="'fa-solid fa-lock'"
-            :inputPlaceholder="'Confirm your password'"
+            :inputPlaceholder="'Confirme a senha'"
             v-model="signupData.confirmPassword"
           />
-          <ButtonComponent :value="'Sign Up'" :onClickFunction="submitForm" />
+          <div class="input-container button">
+            <input type="submit" value="Sign Up"/>
+          </div>
         </Form>
-        <SignArea :text="'Already have an account?'" :url="'/login'" :link="'Login'" />
+        <SignArea :text="'Já está cadastrado? Faça login clicando neste'" :url="'/login'" :link="'link'" />
       </div>
     </div>
   </div>
