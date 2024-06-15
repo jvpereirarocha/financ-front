@@ -4,6 +4,7 @@
 	const passwordValue = ref('')
 	import TitleComponent from '@/components/Title.vue'
 	import ButtonComponent from '@/components/Button.vue'
+	import PasswordInput from '@/components/inputs/PasswordInput.vue'
 	import InputForm from '@/components/InputForm.vue'
 	import SignArea from '@/components/SignArea.vue'
 	import { useAuthStore } from '@/stores/auth'
@@ -48,6 +49,7 @@
 	<div class="auth-area">
 		<div class="auth-container">
 			<TitleComponent title="Calcs" :isSubtitle=false />
+			<hr class="divisor">
 			<div class="form login">
 				<TitleComponent title="Login" :isSubtitle=true />
 				<Form :validation-schema="schema" v-slot="{ errors, isSubmitting }">
@@ -57,9 +59,8 @@
 						:inputIconClass="'fa-solid fa-envelope'"
 						:inputPlaceholder="'Enter your email'"
 						v-model="emailValue"/>
-					<InputForm
-						:inputType="'password'"
-						:inputRequired="true"
+					<PasswordInput
+						:inputName="'password'"
 						:inputIconClass="'fa-solid fa-lock'"
 						:inputPlaceholder="'Enter your password'"
 						v-model="passwordValue"/>

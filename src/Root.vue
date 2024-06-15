@@ -6,6 +6,8 @@ import { RouterView } from 'vue-router'
 
 
 <template>
-    <Alert />
-    <RouterView />
+    <div class="container-fluid">
+        <Alert />
+        <RouterView />
+    </div>
 </template>

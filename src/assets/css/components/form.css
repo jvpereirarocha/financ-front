@@ -58,7 +58,7 @@
     font-weight: 500;
     letter-spacing: 1px;
     border-radius: 6px;
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-success);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -79,7 +79,12 @@
 
 .sign-area a {
     text-decoration: none;
-    color: var(--bg-secondary);
+    color: var(--cerise);
     font-weight: 500;
     transition: all 0.2s ease;
+}
+
+.click-icon {
+    cursor: pointer;
+    left: calc(100% - 2* (1.2rem));
 }

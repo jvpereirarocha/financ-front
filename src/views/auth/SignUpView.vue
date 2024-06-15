@@ -10,6 +10,7 @@ const signupData = reactive({
 })
 import TitleComponent from '@/components/Title.vue'
 import ButtonComponent from '@/components/Button.vue'
+import PasswordInput from '@/components/inputs/PasswordInput.vue'
 import InputForm from '@/components/InputForm.vue'
 import SignArea from '@/components/SignArea.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -68,6 +69,7 @@ async function submitForm() {
     <div class="auth-area">
         <div class="auth-container">
             <TitleComponent title="Calcs" :isSubtitle=false />
+            <hr class="divisor">
             <div class="form login">
                 <TitleComponent title="Sign Up" :isSubtitle=true />
                 <Form :validation-schema="schema">
@@ -100,20 +102,16 @@ async function submitForm() {
                         :inputIconClass="'fa-solid fa-envelope'"
                         :inputPlaceholder="'Enter your email'"
                         v-model="signupData.email"/>
-                    <InputForm
-                        :inputName="'password'"
-                        :inputType="'password'"
-                        :inputRequired="true"
-                        :inputIconClass="'fa-solid fa-lock'"
-                        :inputPlaceholder="'Enter your password'"
-                        v-model="signupData.password" />
-                    <InputForm
-                        :inputName="'confirmPassword'"
-                        :inputType="'password'"
-                        :inputRequired="true"
-                        :inputIconClass="'fa-solid fa-lock'"
-                        :inputPlaceholder="'Confirm your password'"
-                        v-model="signupData.confirmPassword" />
+					<PasswordInput
+						:inputName="'password'"
+						:inputIconClass="'fa-solid fa-lock'"
+						:inputPlaceholder="'Enter your password'"
+						v-model="signupData.password"/>
+					<PasswordInput
+						:inputName="'confirmPassword'"
+						:inputIconClass="'fa-solid fa-lock'"
+						:inputPlaceholder="'Confirm your password'"
+						v-model="signupData.confirmPassword"/>
                     <ButtonComponent :value="'Sign Up'" :onClickFunction="submitForm" />
                 </Form>
                 <SignArea :text="'Already have an account?'" :url="'/login'" :link="'Login'" />

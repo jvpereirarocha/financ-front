@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^4.6.2",
+    "bootstrap": "^5.0.2",
     "express": "^4.19.2",
     "maska": "^2.1.10",
     "pinia": "^2.1.3",

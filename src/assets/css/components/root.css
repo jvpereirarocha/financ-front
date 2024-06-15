@@ -1,66 +1,405 @@
 :root {
+    --gray-light: #EFEFEF;
+    --byzantine-blue: #3454D1;
+    --turquoise: #34D1BF;
+    --bg-black-dark: #070707;
+    --bg-success: #5cb85c;
     --bg-light: #fff;
-    --bg-dark: #020024;
-    --bg-secondary: #de838e;
-    --bg-gray: #777;
-    --bg-tertiary: #00d4ff;
-    --bg-light-gray: #f3f3f3;
-    --bg-white: #ebe9e9;
-    --compressed-sidebar: 6.25rem;
-    --max-width-sidebar: 18rem;
+    --bg-secondary: #343434;
+    --cerise: #D1345B;
+    --sidebar-size: 280px;
+    --viewehight-size: 100vh;
 }
+
+.poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-    outline: none;
-    border: none;
 }
 
-@media (max-width: 767px) {
-    html {
-        font-size: 12px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1365px) {
-    html {
-        font-size: 15px;
-    }
-}
-
-@media (min-width: 1366px) {
-    html {
-        font-size: 18px;
-    }
-}
-
-/* #020024 - #de838e - 00d4ff */
-
-.title {
-    font-size: 2rem;
+html {
     font-weight: 500;
-    text-align: center;
-    margin-bottom: 2rem;
-    width: 100%;
+    font-size: 10px;
+    font-family: "Poppins", sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-.subtitle {
-    font-size: 1rem;
-    font-weight: 400;
-    text-align: center;
-    margin-bottom: 2rem;
+.container {
+    display: grid;
     width: 100%;
+    min-height: var(--viewehight-size);
+    grid-template-columns: var(--sidebar-size) calc(100% - var(--sidebar-size));
+    grid-template-rows: 1fr minmax(auto, 50px);
+    grid-template-areas:
+        "menu content"
+        "menu footer";
 }
 
-.title::after,
-.subtitle::after {
+.container-fluid {
+    padding: 0 !important;
+}
+
+/* Start of menu CSS */
+input[data-function*='swipe'] {
+    position: absolute;
+    opacity: 0;
+}
+
+label[data-function*='swipe'] {
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    z-index: 1;
     display: block;
-    content: '';
-    height: 2px;
+    width: 4.2rem;
+    height: 4.2rem;
+    font: 4.2rem fontawesome;
+    text-align: center;
+    color: #333;
+    cursor: pointer;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s;
+}
+
+label[data-function*='swipe']:hover {
+    color: #263249;
+}
+
+input[data-function*='swipe']:checked~label[data-function*='swipe'] {
+    transform: translate3d(280px, 0, 0);
+}
+
+label[data-function*='swipe']:checked {
+    display: block;
+}
+
+label:nth-child(2) {
+    display: none;
+}
+
+input[data-function*='swipe']:checked~label:nth-child(2) {
+    display: block;
+    transform: translate3d(280px, 0px, 0px);
+}
+
+input[data-function*='swipe']:checked~label:nth-child(3) {
+    display: none;
+}
+
+input[data-function*='swipe']:checked~.headings {
+    transform: translate3d(280px, 0px, 0px);
+}
+
+input[data-function*='swipe']:checked~.sidebar {
+    transform: translate3d(0px, 0px, 0px);
+}
+
+input[data-function*='swipe']:checked~.sidebar .menu li {
     width: 100%;
-    background-color: var(--bg-secondary);
-    border-radius: 25px;
+}
+
+.menu {
+    display: flex;
+    flex-flow: column nowrap;
+    height: calc(100% - 11rem);
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    grid-area: menu;
+    background-color: var(--cerise);
+}
+
+.menu-title {
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.sidebar {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    transform: translate3d(-280px, 0px, 0px);
+    position: absolute;
+    width: 280px;
+    background: var(--gray-light);
+    color: var(--bg-black-dark);
+    left: 0;
+    height: 100%;
+    transition: all 0.3s;
+}
+
+.menu ul li {
+    padding: 10px;
+    list-style: none;
+    width: 0%;
+}
+
+.menu ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+}
+
+.menu ul li a span.menu-item-icon {
+    margin-left: 1rem;
+}
+
+.menu ul li a {
+    color: #fff;
+    border: 3px solid #fff;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 900;
+    display: block;
+    text-decoration: none;
+    padding: 5px 0px 5px 0;
+    margin: 0 20px;
+}
+
+.menu ul .dropdown-container {
+    display: none;
+    padding-left: 1rem;
+    background-color: var(--byzantine-blue);
+    height: min-content;
+}
+
+/* End of menu CSS */
+
+
+/* Start of content CSS */
+.content {
+    grid-area: content;
+    background-color: var(--gray-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.main-title {
+    font-weight: bold;
+    font-size: 3.6rem;
+    text-align: center;
+}
+
+/* Sub components of content */
+.cards-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 4rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    flex: 0 0 40rem;
+    border-radius: 0.5rem;
+    box-shadow: 3px 2px 16px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    transition: all 0.1s ease-in-out;
+    background-color: var(--cerise);
+    color: white;
+}
+
+.card:hover {
+    transform: translateY(-5%);
+}
+
+.card-header {
+    margin-bottom: 2rem;
+}
+
+.card-body {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 2.4rem;
+    text-align: center;
+}
+
+.card-text {
+    text-align: center;
+    text-indent: 1.5rem;
+}
+
+.card-footer {
+    margin-top: 5rem;
+}
+
+.btn {
+    border-radius: 5px;
+    padding: 1rem;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-size: 1.6rem;
+}
+
+.btn-success {
+    background-color: var(--bg-success);
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+    padding: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tr:nth-of-type(odd) {
+    background-color: var(--gray-light);
+    color: black;
+}
+
+tr:nth-of-type(even) {
+    background-color: var(--cerise);
+    color: white;
+}
+
+th {
+    background-color: #fff;
+    color: black;
+    font-weight: bold;
+}
+
+td,
+th {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    font-size: 16px;
+}
+
+td {
+    font-size: 14px;
+}
+
+a.btn-action {
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+tr:nth-of-type(odd) td a.btn-action {
+    color: #000;
+}
+
+tr:nth-of-type(even) td a.btn-action {
+    color: #fff;
+}
+
+/* End content's sub components */
+
+
+/* Start footer CSS */
+.footer {
+    grid-area: footer;
+    height: 5rem;
+    text-align: center;
+    background-color: var(--cerise);
+}
+
+/* End of footer CSS */
+
+
+/* Responsive configs */
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(auto, 300px) 1fr minmax(auto, 150px);
+        grid-template-areas:
+            "menu"
+            "content"
+            "footer";
+        gap: 0.3rem;
+        overflow-y: scroll;
+    }
+}
+
+@media only screen and (max-width: 760px),
+(min-device-width: 768) and (max-device-width: 1024px) {
+
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid #ccc;
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+
+    td:nth-of-type(1):before {
+        content: "Id Transação";
+    }
+
+    td:nth-of-type(2):before {
+        content: "Descrição";
+    }
+
+    td:nth-of-type(3):before {
+        content: "Valor";
+    }
+
+    td:nth-of-type(4):before {
+        content: "Tipo de transação";
+    }
+
+    td:nth-of-type(5):before {
+        content: "Ação";
+    }
 }
